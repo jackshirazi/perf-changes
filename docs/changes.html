@@ -1,0 +1,178 @@
+<HTML>
+ <HEAD>
+  <TITLE>
+   All the performance changes in the JVM since Java/JDK/JVM 10
+  </TITLE>
+ </HEAD>
+ <BODY>
+
+<H1>All the performance changes in the JVM since Java/JDK/JVM 10</H1>
+
+<H2>Java/JDK/JVM 10</H2>
+
+<UL>
+<LI><A HREF="http://openjdk.java.net/jeps/304">JEP 304 Garbage Collector Interface</A>. This is a code cleanup rather than actual delivery of an interface, there will be at least one more JEP to achieve a clean interface. The nice thing here is the stated aim is to support isolated GCs, and specific examples given are so that the community can support CMS when Oracle stops supporting it, and to make Shenandoah (http://openjdk.java.net/jeps/189) easier to integrate
+<LI><A HREF="http://openjdk.java.net/jeps/307">JEP 307 Parallel Full GC for G1</A>. The worst case pause time for G1 prior to Java 10 is failover into the serial Full GC when the G1 garbage collector just can't keep up with the rate of garbage being produced. Although the G1 goal is for this failure mode to never occur, clearly it does sometimes, so this improvement makes your worst case G1 pause potentially significantly better. So if you are using G1, you really want to move to Java 10
+<LI><A HREF="http://openjdk.java.net/jeps/310">JEP 310 Application Class-Data Sharing</A>. A new -XX:+UseAppCDS option allows application classes to be shared between JVMs that use the same classpath on the same machine (previously only bootclass loaded classes were shared) - this should allow smaller runtime images and faster startup where it can be used. Note there is a multi-stage procedure. First run with "-Xshare:off -XX:+UseAppCDS -XX:DumpLoadedClassList=somefile.lst" to get the list of classes actually loaded by your application listed into "somefile.lst". Then dump the shared archive using "-Xshare:dump -XX:+UseAppCDS -XX:SharedClassListFile=somefile.lst -XX:SharedArchiveFile=somefile.jsa". Finally you can use the shared archive with "-Xshare:on -XX:+UseAppCDS -XX:SharedArchiveFile=somefile.jsa". Note if the classpath doesn't match the JVM that generated the archive, the JVM will fail to start if you use -Xshare:on. To have it ignore the incompatibility in that case and start normally (no archive used) use -Xshare:auto
+<LI><A HREF="http://openjdk.java.net/jeps/312">JEP 312 Thread-Local Handshakes</A>. This is an internal improvement to allow improvements to implementations that might benefit from stopping groups of threads instead of all threads. Things that will benefit include G1, biased locking, stack sampling, synchronization. The only relevant item for most developers is that you can disable it with -XX:-ThreadLocalHandshakes
+<LI><A HREF="http://openjdk.java.net/jeps/316">JEP 316 Heap Allocation on Alternative Memory Devices</A>. Some operating systems already expose non-DRAM memory through the file system. This feature allows the JVM to allocate the heap on those devices using a  -XX:AllocateHeapAt=path_to_file_system which will memory map the heap onto the device. All other parts of the JVM runtime remain in DRAM. Note non-DRAM memory is typically slower, so you should understand why you'd want to do this.
+<LI><A HREF="http://openjdk.java.net/jeps/317">JEP 317 Experimental Java-Based JIT Compiler</A>. To enable Graal to be used as an experimental JIT compiler, starting with the Linux/x64 platform, use -XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler. This is the long term future of the JVM JIT compiler, but beware for now it's still experimental
+</UL>
+<HR>
+
+<H2>Java/JDK/JVM 11</H2>
+
+<UL>
+<LI><A HREF="http://mail.openjdk.java.net/pipermail/hotspot-gc-use/2018-June/002759.html">Many many improvements in G1</A> mean that if you are using G1 and it's not quite meeting your targets, you should try out the Java 11 JVM on your existing application to see if you get an immediate garbage collection improvement
+<LI><A HREF="http://openjdk.java.net/jeps/331">JEP 331: Low-Overhead Heap Profiling</A> - low-overhead enough (less than 3%, maybe even less than 1%) to be enabled by default, letting you continuously sample Java heap allocations. Accessible via JVMTI. I expect there will be profilers available to use this as soon as it is released. Potentially the single biggest improvement here - low overhead simple object profiling in production
+<LI><A HREF="http://openjdk.java.net/jeps/318">JEP 318: Epsilon: A No-Op Garbage Collector</A> - using a new flag -XX:+UseEpsilonGC or -XX:+UseNoGC, this new GC allocates but doesn't collect; once the heap is full the JVM will shut down. Useful for testing and specialized applications that never need a GC (using this collector would avoid GC barriers that are added to the application by other collectors even when no collection is triggered, so if you need to eliminate every last bit of overhead as in ultra-low latency applications, it's a valid GC option)
+<LI><A HREF="http://openjdk.java.net/jeps/328">JEP 328: Flight Recorder</A> - now open sourced and added in Java 11, records events originating from applications, the JVM and the OS targeting less than 1% overhead when enabled and no overhead when not enabled. Turn on with -XX:StartFlightRecording or dynamically using jcmd with options JFR.start, JFR.dump filename=recording.jfr JFR.stop (eg jcmd PID JFR.start). jdk.jfr package let's your application create events, and also process recorded files of events. Expect this to become pretty standard now that it's open sourced, you should learn to use this if you currently don't - see this month's articles and tools sections for details
+<LI><A HREF="http://openjdk.java.net/jeps/321">JEP 321: HTTP Client (Standard)</A> - Expected to enable better asynchronous handling of HTTP requests with fewer resources required, using the java.net.http package. You're probably using an Apache or other package which already does this anyway, but whatev, better late than never
+<LI><A HREF="http://openjdk.java.net/jeps/333">JEP 333: ZGC: A Scalable Low-Latency Garbage Collector (Experimental)</A> - new collector targeting pauses of under 10 millisecond for any size heap. ZGC is a concurrent, single-generation, region-based, NUMA-aware, compacting collector; Stop-the-world phases are limited to root scanning so pretty quick! Experimental - need to compile a JVM with --with-jvm-features=zgc and then enable with -XX:+UnlockExperimentalVMOptions -XX:+UseZGC. Likely to require much more memory and CPU than other existing openJDK collectors
+<LI><A HREF="http://openjdk.java.net/jeps/309">JEP 309: Dynamic Class-File Constants</A> - unlikely to be any immediate performance change (not many tools can take advantage of it yet), though longer term it might reduce startup time by having some processing moved to compile-time and lazy loaded. May be useful for specialized applications that want to use Epsilon (the no-op GC) as it might eliminate some object creation. The new java.lang.invoke.ConstantBootstraps class is provided to assist Java implementations using this feature
+<LI><A HREF="http://openjdk.java.net/jeps/315">JEP 315: Improve Aarch64 Intrinsics</A> - improves performance of sin/cos/log functions on some ARM64 processors
+<LI><A HREF="http://openjdk.java.net/jeps/324">JEP 324: Key Agreement with Curve25519 and Curve448</A> - small performance improvement expected in some cryptography functions
+<LI><A HREF="http://openjdk.java.net/jeps/332">JEP 332: Transport Layer Security (TLS) 1.3</A> - small performance improvement expected
+<LI><A HREF="http://openjdk.java.net/jeps/181">JEP 181: Nest-Based Access Control</A> - unlikely to be any performance change (theoretically there could be a benefit from direct access of fields without bridge methods, but in practice the JIT already inlines those)
+</UL>
+<HR>
+
+<H2>Java/JDK/JVM 12</H2>
+
+<UL>
+<LI><A HREF="http://openjdk.java.net/jeps/189">Shenandoah low pause garbage collector added to the JVM</A>. Use with -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC. They recommend also using -XX:+AlwaysPreTouch, -XX:+UseNUMA, -XX:+UseTransparentHugePages (and set /sys/kernel/mm/transparent_hugepage/enabled and /sys/kernel/mm/transparent_hugepage/defrag to "madvise" on Linux), -XX:-UseBiasedLocking and either -XX:+DisableExplicitGC or -XX:+ExplicitGCInvokesConcurrent
+<LI><A HREF="http://openjdk.java.net/jeps/344">a G1 improvement</A>, no tuning options but a change in behaviour that means G1 can get more efficient over time based on runtime analysis - worth knowing about so that you let tests run long enough for heuristics to kick in, and so that if you are analysing you understand the behaviour
+<LI><A HREF="http://openjdk.java.net/jeps/346">G1 to return memory to the OS</A>. Tuning options G1PeriodicGCInterval and G1PeriodicGCSystemLoadThreshold, 0 disables the features. If more than G1PeriodicGCInterval milliseconds have passed since any previous garbage collection pause and getloadavg() (one-minute) is below G1PeriodicGCSystemLoadThreshold then a full GC or concurrent GC (if G1PeriodicGCInvokesConcurrent is set) is triggered, and at the end of that GC the Java heap size is adjusted and any excess memory is returned to the operation system
+<LI><A HREF="http://openjdk.java.net/jeps/341">Include a default class data-sharing (CDS) archive</A>. This should help speed up startup. Xshare:auto was enabled by default in Java 11, but there was no default archive so each JVM needed to create one, this JEP adds a default. The JVM should start faster if there's already one (shareable) running. To turn off class data-sharing use -Xshare:off.
+<LI><A HREF="https://wiki.openjdk.java.net/display/shenandoah/Main#Main-PerformanceAnalysis">Suggestions for performance analysing Shenandoah garbage collector</A>
+<LI><A HREF="https://wiki.openjdk.java.net/display/CodeTools/jcstress">Java Concurrency Stress test suite, jcstress, to aid testing the correctness of concurrency</A>
+</UL>
+<HR>
+
+<H2>Java/JDK/JVM 13</H2>
+
+<UL>
+<LI><A HREF="http://openjdk.java.net/jeps/353">A new implementation for TCP sockets in the JVM (needed for integrating fibers properly).</A> The old implementation remains available, and can be switched on by setting the property jdk.net.usePlainSocketImpl to true (or apparently anything, though presumably not to false). You need to test the change if you rely on TCP IO behaviour. Also note that java.net.SocketInputStream and java.net.SocketOutputStream are no longer used in the new implementation, which may affect any instrumenting monitoring tools
+<LI><A HREF="http://openjdk.java.net/jeps/351">ZGC now returns unused heap memory to the operating system.</A> The flag -XX:ZUncommitDelay=SECONDS (defaulted to 5 minutes, ie 5*60 seconds, same as -XX:ShenandoahUncommitDelay=) let's you set the timeout after which unused memory is returned, and the flag -XX:-ZUncommit allows you to turn off the capability. In all cases, memory will never reduce below the -Xms value
+<LI><A HREF="http://openjdk.java.net/jeps/350">Application class data sharing</A> (allows multiple JVM processes to share classes which reduces startup time and footprint) now allows the dynamic archiving of classes at the end of Java application execution, by adding the flag -XX:ArchiveClassesAtExit=FILEPATH. The class data archive will be dumped on normal exit of the JVM (not on a crash). All the existing class data sharing capabilities still work, this is an additional option. The previous procedure was to: 1. Do one or more trial runs to create a class list; 2. Dump an archive using the created class list; 3.Run with that archive. Now you can dump with "bin/java -XX:ArchiveClassesAtExit=FILEPATH ..." and run with "bin/java -XX:SharedArchiveFile=FILEPATH ...". Classes that are not loaded will not get dumped, so bear that in mind if you have instances that run through different code pathways
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8222145">A new -XX:SoftMaxHeapSize=BYTESIZE flag which can be adjusted dynamically</A> gives the ZGC a target heap size (below -Xmx) to try to reach. You can dynamically adjust using "jcmd VM.set_flag SoftMaxHeapSize BYTESIZE" or through the HotSpot MXBean. Note that as well as targeting footprint, this can be used to make the garbage collector more aggressive
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8221786">ZGC maximum Heap Size has been increased to 16TB</A> (was previously 4TB)
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8216188"><STRONG>REMOVED</STRONG> The deprecated -XX:+AggressiveOpts flag has been removed</A> (only edge case GC tuners ever used it)
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8205131"><STRONG>REMOVED</STRONG> The obsolete methods traceInstructions(boolean) and traceMethodCalls(boolean) have been removed from the java.lang.Runtime class.</A> These methods have been non-functional for many releases. Did you ever try them? Never worked for me anyway
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8222252">Improved the behavior of MaxRAM settings with UseCompressedOops</A> - prior to this change, if the heap size selection resulting from various these flags exceeded the maximum reachable address when UseCompressedOops is enabled, the heap size would be truncated to be within the CompressedOops range. Also, the percentage or fractional calculation performed was based on the value of MaxRAM and not the amount of physical memory available in the system. The following are the options impacted by this change: -XX:MaxRAMPercentage -XX:MaxRAMFraction -XX:MinRAMPercentage -XX:MinRAMFraction -XX:InitialRAMPercentage -XX:InitialRAMFraction -XX:MaxRAM. The new behavior calculates the percentage or fraction based on the host's available memory unless the user also specifies -XX:MaxRAM. In addition, UseCompressedOops is automatically disabled if the heap size resulting from the use of any of these options, including -XX:MaxRAM, is greater than can be addressed in CompressedOops mode, unless the -XX:+UseCompressedOops option is specified to override this behavior
+<LI><A HREF="https://wiki.openjdk.java.net/display/zgc/Main">ZGC main tool page</A>
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8134448">Documentation for -XX:SharedArchiveConfigFile=FILEPATH option</A>
+<LI><A HREF="https://github.com/simonis/cl4cds">cl4cds tool to help create Application Class Data Sharing classlist files for the -XX:SharedClassListFile option</A>
+</UL>
+<HR>
+
+<H2>Java/JDK/JVM 14</H2>
+
+<UL>
+<LI><A HREF="https://openjdk.java.net/jeps/363">Remove the Concurrent Mark Sweep (CMS) Garbage Collector</A>
+<LI><A HREF="https://openjdk.java.net/jeps/366">Deprecate the ParallelScavenge + SerialOld GC Combination</A>
+<LI><A HREF="https://openjdk.java.net/jeps/345">NUMA-Aware Memory Allocation for G1</A>
+<LI><A HREF="https://openjdk.java.net/jeps/364">ZGC on macOS</A>
+<LI><A HREF="https://openjdk.java.net/jeps/365">ZGC on Windows</A>
+<LI><A HREF="https://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8224666">Parallel GC Improvements</A>
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8235685">Shenandoah: Enable leak profiler</A>
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8228720">Shenandoah: Implementation of concurrent class unloading</A>
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8232051">Epsilon should warn about Xms/Xmx/AlwaysPreTouch configuration</A>
+<LI><A HREF="https://openjdk.java.net/jeps/349">JFR Event Streaming. API for the continuous consumption of JFR data externally. The events are the same as the ones you can record, but instead of starting a recording, stopping it, dumping the contents to disk, and then loading that elsewhere, you can get the events continuously</A>
+<LI><A HREF="https://openjdk.java.net/jeps/352">Non-volatile mapped byte buffers - MappedByteBuffer instances that refer to non-volatile memory (NVM). Note you could do this prior to this JEP, but it was a bit messy. This cleans up the situation and provides explicit support. Transactional and state preserving applications might use NVM</A>
+<LI><A HREF="https://openjdk.java.net/jeps/359">Preview of "Records", classes that are like structs</A>
+<LI><A HREF="https://openjdk.java.net/jeps/370">Incubator for Foreign-memory access API</A>
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8225035">-XX:+AdjustStackSizeForTLS</A>
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8229516">Thread interrupt state is now available even when the thread is not live</A>
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8231602"><STRONG>REMOVED</STRONG> Thread suspend/resume are now deprecated for removal</A>
+<LI><A HREF="https://mbien.dev/blog/entry/jfr-event-streaming-with-java">JFR Event Streaming with Java 14</A>
+<LI><A HREF="https://github.com/gunnarmorling/jfr-custom-events">Java Flight Recorder custom events demo including exporting events via event streaming</A>
+</UL>
+<HR>
+
+<H2>Java/JDK/JVM 15</H2>
+
+<UL>
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8237354">New Option Added to jcmd for Writing a gzipped Heap Dump</A>. A new integer option gz has been added to the GC.heap_dump diagnostic command. If it is specified, it will enable the gzip compression of the written heap dump. The supplied value is the compression level. It can range from 1 (fastest) to 9 (slowest, but best compression). The recommended level is 1. Use like 'jcmd PROCESS_ID GC.heap_dump -gz=5 Myheap.dump'
+<LI><A HREF="https://openjdk.java.net/jeps/377">ZGC garbage collector is no longer experimental</A>
+<LI><A HREF="https://openjdk.java.net/jeps/379">Shenandoah garbage collector is no longer experimental</A>
+<LI><A HREF="https://openjdk.java.net/jeps/371">JEP371 Hidden Classes</A> - can reduce the JVM footprint if frameworks use these instead of other mechanisms, by reducing the lifetime of generated classes. Also these classes can be created faster (as ClassLoader::defineClass is slower than the new mechanism which should have similar performance to Unsafe::defineAnonymousClass). If you generate classes at runtime you should investigate this
+<LI><A HREF="https://openjdk.java.net/jeps/373">JEP373 Reimplement the Legacy DatagramSocket API</A>. Likely to affect performance in some use cases - but you'll only be able to tell with testing. Note the old version can be used (for a version or two) with the flag -Djdk.net.usePlainDatagramSocketImpl
+<LI><A HREF="https://openjdk.java.net/jeps/374">JEP374 Disable and Deprecate Biased Locking</A> - the -XX:+UseBiasedLocking option to re-enable it is still available (as are associated flags), but will be removed in a future version. Worth testing whether it's still needed, the assumption is that it no longer makes a significant difference on the latest hardware. The JDK team requests you to report any significant performance regressions with biased locking disabled
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8243099">Added Linux specific socket option for SO_INCOMING_NAPI_ID support to jdk.net.ExtendedSocketOptions</A>. The socket option allows applications to query the NAPI (New API) ID of the underlying device queue associated with its socket connection and take advantage of the Application Device Queue (ADQ) feature of high performance Network Interface Card (NIC) devices. The NAPI ID is associated with the queue on which the last frame is received - this let's you split the incoming flows among threads based on the Rx queue on which they are received, improving thread-IO locality
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8237767">Field Layout Computation Changed</A> - potential performance impact. The way that field layout is computed has been changed, with more aggressive optimizations to avoid unused gaps in instances. Can be disabled with option -XX:-UseEmptySlotsInSupers. (For a limited time, you can use the old layout with option -XX:-UseNewFieldLayout, but that will be removed in a future release)
+<LI><A HREF="https://openjdk.java.net/jeps/383">JEP383 Foreign-Memory Access API (Second Incubator)</A> useful for off heap management
+<LI><A HREF="https://openjdk.java.net/jeps/339">JEP339 Edwards-Curve Digital Signature Algorithm (EdDSA)</A> - slightly faster secure signatures
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8243628"><STRONG>REMOVED</STRONG> Deprecated -XX:ForceNUMA Option (will be removed in a future release)</A>This option has existed to support testing of NUMA-related code paths when running on a single node / UMA platform
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8240094">Optimized Empty Substring Handling</A> - String.substring and related methods stripLeading and stripTrailing now avoid redundantly creating a new empty String (this may impact code that depends on unspecified behaviour and the identity of empty sub-strings)
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8242848">Performance Improvement for InflaterOutputStream.write</A> - InflaterOutputStream(OutputStream out, Inflater infl, int bufLen) allows for specifying the decompressor and buffer size to be used. Starting with JDK 15 the buffer size specified via InflaterOutputStream(OutputStream out, Inflater infl, int bufLen) will be used in calls to InflaterOutputStream.write(byte[] b, int off, int len). If the buffer size is not specified when invoking the InflaterOutputStreamconstructor, it will default to 512 bytes (previously it was always using 512 bytes regardless)
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8241670">Improved Ergonomics for G1 Heap Region Size</A> The default heap region size calculation has been changed to (return larger regions by default) intended to improve startup and runtime performance
+<LI><A HREF="https://openjdk.java.net/jeps/384">JEP384 Records (Second Preview)</A> - likely to be faster than equivalent class objects, though probably in later JVMs after common usage is identified
+</UL>
+<HR>
+
+<H2>Java/JDK/JVM 16</H2>
+
+<UL>
+<LI><A HREF="https://openjdk.java.net/jeps/376">JEP376: ZGC: Concurrent Thread-Stack Processing</A>. ZGC removed the last stop-the-world activity that takes variable time (this one was proportional to the number of threads), so should now be under a millisecond for all pauses (given sufficient memory and CPU available)
+<LI><A HREF="https://openjdk.java.net/jeps/386">JEP386: Alpine Linux Port</A>. Alpine allows a smaller image than the other linux options, so smallest container size - under 50MB stripped JVM base image
+<LI><A HREF="https://openjdk.java.net/jeps/380">JEP380: Unix-Domain Socket Channels have been added</A> (but not yet on Windows 2019 Server - https://bugs.openjdk.java.net/browse/JDK-8259014). For local, inter-process communication, Unix-domain sockets are both more secure and more efficient than TCP/IP loopback connections. Unix-domain sockets have faster setup times and higher data throughput than TCP/IP loopback connections
+<LI><A HREF="https://zhuanlan.zhihu.com/p/343282342">Client-server example of using Unix-Domain Sockets</A>
+<LI><A HREF="https://openjdk.java.net/jeps/387">JEP387: Elastic Metaspace - change the way metaspace is allocated and reclaimed to make it more efficient</A>. An additional option is added -XX:MetaspaceReclaimPolicy=(balanced|aggressive|none). 'balanced' is default and should be similar but more efficient than previously ; 'aggressive' has better memory-reclamation rates at the cost of increased virtual-memory fragmentation; 'none' disables memory reclamation altogether.
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8236926">JDK-8236926: Concurrently Uncommit Memory in G1</A>. This new feature is always enabled and changes the time when G1 returns Java heap memory to the operating system. G1 still makes sizing decisions during the GC pause, but offloads the expensive work to a thread running concurrently with the Java application
+<LI><A HREF="https://openjdk.java.net/jeps/347">JEP347: Enable C++14 Language Features</A>. If you use C++ with the JDK, you'll want to see whether the C++14 features can improve the performance or memory of your application
+<LI><A HREF="https://openjdk.java.net/jeps/338">JEP338: Vector API (Incubator)</A>. Vector computations that reliably compile at runtime to optimal vector hardware instructions. If you use these types of operations - eg ML, image processing, scientific processing, massive financial calculations, etc - then you should check it out and feedback since this matters to you
+<LI><A HREF="https://openjdk.java.net/jeps/389">JEP389: Foreign Linker API (Incubator)</A>. More flexible than JNI, and hopefully faster
+<LI><A HREF="https://openjdk.java.net/jeps/393">JEP393: Foreign-Memory Access API (Third Incubator)</A>. Further improvements due to feedback. Useful for off heap management
+<LI><A HREF="https://mail.openjdk.java.net/pipermail/panama-dev/2020-November/011342.html">Benchmark showing faster performance from the Foreign-Memory Access</A>
+<LI><A HREF="https://openjdk.java.net/jeps/395">JEP395: Records</A>. Likely to be faster than equivalent class objects, though probably in later JVMs after common usage is identified
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8247281">JDK-8247281: Object monitors no longer keep strong references to their associated object</A>. Previously strong references would be observable through JVM TI functions that walk the heap (reported as JVMTI_HEAP_ROOT_MONITOR or JVMTI_HEAP_REFERENCE_MONITOR) and in heap dumps (reported as HPROF_GC_ROOT_MONITOR_USED). As of this release, a weak reference is used and these are not observable to JVM TI or heap dumps
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8255616"><STRONG>REMOVED</STRONG> JDK-8255616: Removal of experimental features AOT jaotc and Graal JIT</A>. Removed because it's used very little but has support cost. The sources for these features remain in the repository, in case any one else is interested in building them
+<LI><A HREF="https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8256718"><STRONG>REMOVED</STRONG> JDK-8256718: Old tracing flags are now obsolete and must be replaced with unified logging</A>. Move: -XX:+TraceClassLoading to -Xlog:class+load=info ; -XX:+TraceClassUnloading to -Xlog:class+unload=info ; -XX:+TraceExceptions to -Xlog:exceptions=info ; -XX:+PrintSharedSpaces to -Xlog:cds=info
+<LI><A HREF="https://tschatzl.github.io/2021/03/12/jdk16-g1-parallel-gc-changes.html">JDK 16 G1/Parallel GC changes</A>
+<LI><A HREF="https://malloc.se/blog/zgc-jdk16">ZGC: What's new in JDK 16</A>
+<LI><A HREF="https://lkorinth.github.io/posts/2020-11-27-metaspace.html">Metaspace in OpenJDK 16</A>
+</UL>
+<HR>
+
+<H2>Java/JDK/JVM 17</H2>
+
+<UL>
+<LI><A HREF="https://openjdk.java.net/jeps/290">Filter Incoming Serialization Data</A>
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8267077">Unified Logging Supports Asynchronous Log Flushing</A>
+<LI><A HREF="https://openjdk.java.net/jeps/415">Context-Specific Deserialization Filters</A>
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8229517">Unified Logging supports asynchronous log flushing</A> with -Xlog:async, with a bounded buffer (-XX:AsyncLogBufferSize=BYTES) - messages are dropped if the buffer isn't flushed fast enough (ie IO rate compared to logging rate is too slow at any time)
+<LI><A HREF="https://openjdk.java.net/jeps/411"><STRONG>REMOVED</STRONG> JEP411 Deprecate the Security Manager for Removal</A> Not specifically performance related, but I know the performance community hae used the Security Manager to track some performance features, notably IO, so it's useful to know this is going
+<LI><A HREF="https://openjdk.java.net/jeps/410">JEP410 Removal of experimental features AOT jaotc and Graal JIT</A> Removed because it's used very little but has support cost
+<LI><A HREF="https://openjdk.java.net/jeps/415">JEP415 Context-Specific Deserialization Filters</A> Useful for defending against too large deserialized objects
+<LI><A HREF="https://openjdk.java.net/jeps/412">JEP412 Foreign Function & Memory API (Incubator)</A> Still in incubation after many iterations. Useful for off heap management
+<LI><A HREF="https://openjdk.java.net/jeps/414">JEP414 Vector API (Incubator)</A> Vector computations that reliably compile at runtime to optimal vector hardware instructions. If you use these types of operations - eg ML, image processing, scientific processing, massive financial calculations, etc - then you should check it out and feedback since this matters to you
+<LI><A HREF="https://openjdk.java.net/jeps/382">JEP382 Faster rendering on MacOS with -Dsun.java2d.metal=true</A>
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8182043">FileSystemView.getSystemIcon() added</A> to allow access to higher quality icons which should provide more optimal scaling
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8254145">Modernization of Ideal Graph Visualizer</A> - a tool to explore visually and interactively the intermediate representation used in the HotSpot VM C2 just-in-time (JIT) compiler
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8268241"><STRONG>REMOVED</STRONG> For those of you using JVMTI, some old heap analysis functions have been deprecated</A>, you should move to the modern versions of these functions
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8266369">A new implementation of the Selector API on Windows</A> - if you have issues it can be reverted for now with -Djava.nio.channels.spi.SelectorProvider=sun.nio.ch.WindowsSelectorProvider on the command line
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8165276">Stricter enforcement of an Agent's premain method to the java.lang.instrument specification</A>
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8204686">Parallel GC now ergonomically determines the optimal number of threads to use for processing java.lang.ref.Reference instances during garbage collection</A> The option -XX:ParallelRefProcEnabled is now true (enabled) by default. You can revert to the previous behavior by specifying -XX:-ParallelRefProcEnabled on the command line. The ergonomics of java.lang.ref.Reference processing can be tuned by using the experimental option -XX:ReferencesPerThread (default value: 1000)
+</UL>
+<HR>
+
+<H2>Java/JDK/JVM 18</H2>
+
+<UL>
+<LI><A HREF="https://openjdk.java.net/jeps/416">Reimplement Core Reflection with Method Handles</A>. Mainly a maintenance change, but there could be performance impact (either way, ie slightly faster or slower depending on the code). A new <CODE>jdk.reflect.useDirectMethodHandle</CODE> property allows the old implementation to be used for now
+<LI><A HREF="https://openjdk.java.net/jeps/417">Vector API (Third Incubator)</A>. Vector computations that reliably compile at runtime to optimal vector hardware instructions. If you use these types of operations - eg ML, image processing, scientific processing, massive financial calculations, etc - then you should check it out and feedback since this matters to you
+<LI><A HREF="https://openjdk.java.net/jeps/418">Internet-Address Resolution SPI</A>. Let InetAddress use plug-in implementations for DNS lookups. Although not delivered with this JEP, a non-blocking SPI should be available soon
+<LI><A HREF="https://openjdk.java.net/jeps/419">Foreign Function & Memory API (Second Incubator)</A>. Still in incubation after many iterations. Useful for off heap management
+<LI><A HREF="https://openjdk.java.net/jeps/421">Deprecate Finalization for Removal</A>. Important in that if you are still using finalize(), you'll need to make code changes at some point in the next 5 years. Also well worth reading for understanding finalize() disadvantages and the alternatives recommended
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8277861">Terminally deprecate Thread.stop()</A>. It's been deprecated for ages  because it was unsafe. While it was unsafe, it was always potentially useful. But actually it never worked consistently, there were all sorts of situations when a thread would fail to stop anyway. So for performance practitioners this is more a reminder that if you need control over rogue threads, you don't really have an option other than to spawn a process which can be reliably killed
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8277212">GC accidentally cleans valid megamorphic vtable inline caches</A>. Fixed long Process Non-Strong References times. This performance bug is fixed, reported against ZGC but potentially affects multiple GC implementations
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8272773">Configurable card table card size</A>. A new option <CODE>-XX:GCCardSizeInBytes</CODE> sets size of the area that a card table entry covers (previously fixed at 512 bytes, now that's the default). Permissible values are now 128, 256, and 512 bytes for all platforms, and 1024 bytes for 64 bit platforms only. Smaller card sizes can lead to less work during garbage collection (which can speed up GC) but lead to more memory usage (which in turn can slow GC)
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8275056">Virtualize G1CardSet containers over heap region</A>. Extends the maximum allowed heap region size from 32MB to 512MB for the G1 garbage collector. The default ergonomic heap region size selection is still limited to 32MB regions maximum, sizes beyond that must be selected manually by using the <CODE>-XX:G1HeapRegionSize</CODE> command line option. This can mitigate fragmentation issues with large objects on large heaps. On very large heaps, using a larger heap region size may also decrease internal region management overhead and increase performance due to larger local allocation buffers
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8266936">Add a finalization JFR event</A>. A new JDK Flight Recorder Event, <CODE>jdk.FinalizerStatistics</CODE>, identifies classes at runtime that use finalizers. The event is enabled by default in the JDK (in the <CODE>default.jfc</CODE> and <CODE>profile.jfc</CODE> JFR configuration files). When enabled, JFR will emit a <CODE>jdk.FinalizerStatistics</CODE> event for each instantiated class with a non-empty finalize() method. The event includes: the class that overrides <CODE>finalize()</CODE>, that class's <CODE>CodeSource</CODE>, the number of times the class's finalizer has run, and the number of objects still on the heap (not yet finalized)
+<LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8274002">Extended Delay Before JDK Executable Installer Starts From Network Drive</A>. On Windows 11 and Windows Server 2022, there can be some slowness with the extraction of temporary installation files when launched from a mapped network drive
+</UL>
+<HR>
+
+ </BODY>
+</HTML>
