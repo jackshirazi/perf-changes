@@ -189,5 +189,38 @@
 </UL>
 <HR>
 
+<H2>Java/JDK/JVM 20</H2>
+
+<UL>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8297247">additional GarbageCollectorMXBean stats</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8137022">improved control of concurrent refinement threads</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8293861">disabling default of preventive GCs</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8297030">HttpClient default Keep Alive time to 30 Seconds</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8288717">idle connection timeouts</A>
+<LI><A HREF="https://minborgsjavapot.blogspot.com/2023/01/java-20-almost-infinite-memory-segment.html">Using Arenas, MemorySegments and MemoryScopes with the Foreign function and memory API preview in JDK 20</A>
+<LI><A HREF="https://mail.openjdk.org/pipermail/jmh-dev/2022-November/003553.html">JMH 1.36 release</A>
+</UL>
+<HR>
+
+<H2>Java/JDK/JVM 21</H2>
+
+<UL>
+<LI><A HREF="https://openjdk.org/jeps/444">JEP444: Virtual Threads. Lightweight threads, you can have millions of them</A>
+<LI><A HREF="https://openjdk.org/jeps/439">JEP439: Generational ZGC. Won't give better GC pauses, but will use less heap memory and CPU in giving those very low (under 1ms) pauses</A>
+<LI><A HREF="https://openjdk.org/jeps/451">JEP451: Prepare to disallow the dynamic loading of agents</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8191565">JDK-8191565 Last resort G1 Full GC moves humongous objects - when G1 would previously OOME</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8306703">JDK-8306703 New JFR View command can aggregate and display event data in a tabular form without the need to dump a recording file, or open up JDK Mission Control. There are 70 predefined views, such as hot-methods, gc-pauses, pinned-threads, allocation-by-site, gc, memory-leaks-by-class, and more</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8305092">JDK-8305092 Thread.sleep(millis, nanos) is now able to perform sub-millisecond sleeps. Before this change, a non-zero nanos argument would round up to a full millisecond. While the precision is improved on most POSIX systems, the actual sleep duration is still subject to the precision and accuracy of system facilities</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8303392">JDK-8303392 Runtime.exec and ProcessBuilder logging of command arguments</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8301627">JDK-8301627 System.exit() and Runtime.exit() logging</A>
+<LI><A HREF="https://openjdk.org/jeps/442">JEP442: Foreign Function & Memory API (Third Preview). Still in preview after many iterations. Useful for off heap management</A>
+<LI><A HREF="https://openjdk.org/jeps/446">JEP446: Scoped Values (Preview). More efficient than thread-local variables, especially with large numbers of virtual threads</A>
+<LI><A HREF="https://openjdk.org/jeps/448">JEP448: Vector API (Sixth Incubator). Vector computations that reliably compile at runtime to optimal vector hardware instructions. If you use these types of operations - eg ML, image processing, scientific processing, massive financial calculations, etc - then you should check it out and feedback since this matters to you</A>
+<LI><A HREF="https://javaspecialists.eu/archive/Issue302-Virtual-Thread-Deadlocks.html">Analyzing virtual thread deadlocks</A>
+<LI><A HREF="https://egahlin.github.io/2023/05/30/views.html">JFR view command</A>
+<LI><A HREF="http://www.fasterj.com/articles/jep451-q-and-a.shtml">Questions And Answers For JEP 451</A>
+</UL>
+<HR>
+
  </BODY>
 </HTML>
