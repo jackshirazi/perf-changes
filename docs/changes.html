@@ -222,5 +222,32 @@
 </UL>
 <HR>
 
+<H2>Java/JDK/JVM 22</H2>
+
+<UL>
+<LI><A HREF="https://openjdk.org/jeps/454">Foreign Function & Memory API Useful for detailed memory management including off heap, and faster than JNI calling non-JVM functions</A>
+<LI><A HREF="https://www.youtube.com/watch?v=KBW4LbCoo6c">Java's Virtual Threads - Next Steps - includes details about improved throughput for network IO operations on virtual threads in Java 22</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8305753">JDK-8305753 JIT compilation is now supprted for -Xshare:dump when  -Xmixed is also specified</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8316735">JDK-8316735 Hotspot hs_err files now print the lock stack when -XX:LockingMode=2 is enabled</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8306441">JDK-8306441 Application pause time during heap dumps has been significantly reduced</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8314243">JDK-8314243 A new -XX:UserThreadWaitAttemptsAtExit=N specified how long the JVM waits for user threads to stop executing native code; N specifies the number of 10ms waits up to a maximum of 10 seconds, defaulting to 300ms</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8211238">JDK-8211238 A new JFR event has been added, jdk.DeprecatedInvocation</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8319551">JDK-8319551 There is increased startup time when Using -XX:StartFlightRecording - this is expected to be decreased again in a future JDK version</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8288899">JDK-8288899 New ForkJoin* methods invokeAllUninterruptibly, adaptInterruptible</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8308593">JDK-8308593 TCP_KEEP* extended socket options now supported on Windows</A>
+<LI><A HREF="https://openjdk.org/jeps/423">GC improvement: JEP423 Region pinning for G1 means better GC performance when JNI code executes</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8321013">GC improvement: JDK-8321013 Better Parallel GC throughput with large object arrays</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8310031">GC improvement: JDK-8310031 Precise Parallel GC scanning of large object arrays for young collection roots</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8319373">GC improvement: JDK-8319373 Better Serial GC throughput with scarce dirty cards</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8315503">GC improvement: JDK-8315503 Better G1 GC code root scan phase during garbage collection</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8140326">GC improvement: JDK-8140326 Faster G1 GC collection of Evacuation Failed regions</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8314573">GC improvement: JDK-8314573 More deterministic G1 GC heap resize at remark</A>
+<LI><A HREF="https://openjdk.org/jeps/464">JEP464 Scoped Values (Second Preview) More efficient than thread-local variables, especially with large numbers of virtual threads</A>
+<LI><A HREF="https://openjdk.org/jeps/462">JEP462 Structured Concurrency (Second Preview). Simplify concurrent programming by grouping related tasks running in different threads</A>
+<LI><A HREF="https://openjdk.org/jeps/460">JEP460: Vector API (Seventh Incubator). Vector computations that reliably compile at runtime to optimal vector hardware instructions. Useful for ML, image processing, scientific processing, massive financial calculations, etc</A>
+<LI><A HREF="https://www.happycoders.eu/java/foreign-function-memory-api/">Foreign Function & Memory API examples</A>
+</UL>
+<HR>
+
  </BODY>
 </HTML>
