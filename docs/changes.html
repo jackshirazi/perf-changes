@@ -249,5 +249,50 @@
 </UL>
 <HR>
 
+<H2>Java/JDK/JVM 23</H2>
+
+<UL>
+<LI><A HREF="https://openjdk.org/jeps/474">JEP-474 ZGC generational mode is now the default</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8329203">JDK-8329203 New Parallel GC Full GC algorithm - reduces footprint and performs better</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8320532">JDK-8320532 Thread.suspend/resume and ThreadGroup.suspend/resume are removed</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8319551">JDK-8319551 Resolution of the startup time regression with -XX:StartFlightRecording</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8330077">JDK-8330077 Add system property jdk.nio.file.WatchService.maxEventsPerPoll to set the maximum number of WatchService events before overflow</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8319251">JDK-8319251 Change LockingMode default from LM_LEGACY to LM_LIGHTWEIGHT - revert using -XX:LockingMode=1</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8139457">JDK-8139457 Relax alignment of array elements - improves the footprint in some cases, but Unsafe accesses to arrays could now be unaligned</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8325496">JDK-8325496 -XX:TrimNativeHeapInterval=ms is now an official product switch - allows the JVM to trim the native heap at periodic intervals</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8324066">JDK-8324066 clhsdb jstack no longer scans for java.util.concurrent locks by default - you need to use the -l option for that</A>
+<LI><A HREF="https://stackoverflow.com/a/78641227">-XX:TrimNativeHeapInterval=ms can be used in earlier JDK versions by adding add -XX:+UnlockExperimentalVMOptions, or dynamically applied with <CODE>jcmd PID System.trim_native_heap</CODE></A>
+</UL>
+<HR>
+
+<H2>Java/JDK/JVM 24</H2>
+
+<UL>
+<LI><A HREF="https://openjdk.org/jeps/475">JEP-475 Although the title "Late Barrier Expansion for G1" seems like it's about changing something in G1, this is actually reducing additional overheads that G1 places on the C2 compiler - so JITC will be faster than it was when you are also using G1 GC</A>
+<LI><A HREF="https://openjdk.org/jeps/483">JEP-483 Ahead-of-Time class loading & linking - a startup speed optimization with new -XX:AOTMode and -XX:AOTCache options to store and use classes letting the JVM skip reading, parsing, loading, and linking them (doesn't let you skip JIT compilation - that is separate). Essentially the next step in CDS</A>
+<LI><A HREF="https://openjdk.org/jeps/484">JEP-484 Class File API - a standard API for parsing, generating, and transforming Java class files</A>
+<LI><A HREF="https://openjdk.org/jeps/490">JEP-490 ZGC: Remove the non-generational mode. Because non-generational GC is almost always worse</A>
+<LI><A HREF="https://openjdk.org/jeps/491">JEP-491 Synchronize virtual threads without pinning. This took forever, but is finally here. You no longer need to try and migrate synchronized blocks and methods to use locks</A>
+<LI><A HREF="https://openjdk.org/jeps/493">JEP-493 Linking runtime images without JMODs. Gives smaller images from jlink in some scenarios</A>
+<LI><A HREF="https://openjdk.org/jeps/498">JEP-498 Warn upon use of memory-access methods in sun.misc.Unsafe</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8337199">JDK-8337199 Two new jcmd commands Thread.vthread_scheduler and Thread.vthread_pollers</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8344882">JDK-8344882 Memory used by internal temporary direct buffers is no longer limited - no longer included in MaxDirectMemorySize</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8286851">JDK-8286851 Options -verbosegc, -noclassgc, -verify, -verifyremote, -ss, -ms and -mx are deprecated. Old->new: -verbosegc -> -verbose:gc, -noclassgc -> -Xnoclassgc, -verify -> -Xverify:all, -verifyremote -> -Xverify:remote, -ss -> -Xss, -ms -> -Xms, -mx -> -Xmx</A>
+<LI><A HREF="https://openjdk.org/jeps/499">JEP-499 Structured Concurrency (Fourth Preview). Simplify concurrent programming by grouping related tasks running in different threads</A>
+<LI><A HREF="https://openjdk.org/jeps/404">JEP-404 Generational Shenandoah (Experimental). Generational GC comes to all GCs eventually. Enable with -XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCMode=generational</A>
+<LI><A HREF="https://openjdk.org/jeps/450">JEP-450 Compact Object Headers (Experimental). Smaller is better if it works for your deployment -XX:+UnlockExperimentalVMOptions -XX:+UseCompactObjectHeaders</A>
+<LI><A HREF="https://openjdk.org/jeps/487">JEP-487 Scoped Values (Fourth Preview). More efficient than thread-local variables, especially with large numbers of virtual threads</A>
+<LI><A HREF="https://openjdk.org/jeps/489">JEP-489 Vector API (Ninth Incubator). Vector computations that reliably compile at runtime to optimal vector hardware instructions. Useful for ML, image processing, scientific processing, massive financial calculations, etc</A>
+<LI><A HREF="https://openjdk.org/jeps/488">JEP-488 Primitive types in patterns, instanceof, and switch (Second Preview). Unlikely to provide any significant performance improvement (fair enough as that's not the motivation)</A>
+<LI><A HREF="https://www.unlogged.io/post/class-file-api-not-your-everyday-java-api">Class File API</A>
+<LI><A HREF="https://ifesunmola.com/a-basic-introduction-to-the-classfile-api/">A Basic Introduction to the Classfile API</A>
+<LI><A HREF="https://jameshamilton.eu/programming/build-compiler-jep-457-class-file-api">Build A Compiler With The JEP 457 Class-File API</A>
+<LI><A HREF="https://www.youtube.com/watch?v=QDk1c0ifoNo">Java 24 Stops Pinning Virtual Threads (Almost) (Nicolai Parlog/Java)</A> <! November 2024 >
+<LI><A HREF="https://www.happycoders.eu/java/ahead-of-time-class-loading-and-linking/">Ahead-of-Time Class Loading & Linking - Turbo for Java Applications (Sven Woltmann/HappyCoders)</A> <! December 2024 >
+<LI><A HREF="https://medium.com/@sibiponkumar/project-leyden-enhancing-javas-adaptability-and-consistency-in-modern-cloud-native-environments-cbed8750db1c">Project Leyden: Enhancing Java's Adaptability and Consistency in Modern Cloud-Native Environments (Sibiponkumar Balaji/Medium)</A> <! October 2024 >
+</UL>
+<HR>
+
+
  </BODY>
 </HTML>
