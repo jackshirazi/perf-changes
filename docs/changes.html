@@ -78,8 +78,8 @@
 <LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8235685">Shenandoah: Enable leak profiler</A>
 <LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8228720">Shenandoah: Implementation of concurrent class unloading</A>
 <LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8232051">Epsilon should warn about Xms/Xmx/AlwaysPreTouch configuration</A>
-<LI><A HREF="https://openjdk.java.net/jeps/349">JFR Event Streaming. API for the continuous consumption of JFR data externally. The events are the same as the ones you can record, but instead of starting a recording, stopping it, dumping the contents to disk, and then loading that elsewhere, you can get the events continuously</A>
-<LI><A HREF="https://openjdk.java.net/jeps/352">Non-volatile mapped byte buffers - MappedByteBuffer instances that refer to non-volatile memory (NVM). Note you could do this prior to this JEP, but it was a bit messy. This cleans up the situation and provides explicit support. Transactional and state preserving applications might use NVM</A>
+<LI><A HREF="https://openjdk.java.net/jeps/349">JFR Event Streaming. API for the continuous consumption of JFR data externally.</A> The events are the same as the ones you can record, but instead of starting a recording, stopping it, dumping the contents to disk, and then loading that elsewhere, you can get the events continuously
+<LI><A HREF="https://openjdk.java.net/jeps/352">Non-volatile mapped byte buffers - MappedByteBuffer instances that refer to non-volatile memory (NVM).</A> Note you could do this prior to this JEP, but it was a bit messy. This cleans up the situation and provides explicit support. Transactional and state preserving applications might use NVM
 <LI><A HREF="https://openjdk.java.net/jeps/359">Preview of "Records", classes that are like structs</A>
 <LI><A HREF="https://openjdk.java.net/jeps/370">Incubator for Foreign-memory access API</A>
 <LI><A HREF="https://bugs.openjdk.java.net/browse/JDK-8225035">-XX:+AdjustStackSizeForTLS</A>
@@ -209,13 +209,13 @@
 <LI><A HREF="https://openjdk.org/jeps/439">JEP439: Generational ZGC. Won't give better GC pauses, but will use less heap memory and CPU in giving those very low (under 1ms) pauses</A>
 <LI><A HREF="https://openjdk.org/jeps/451">JEP451: Prepare to disallow the dynamic loading of agents</A>
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8191565">JDK-8191565 Last resort G1 Full GC moves humongous objects - when G1 would previously OOME</A>
-<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8306703">JDK-8306703 New JFR View command can aggregate and display event data in a tabular form without the need to dump a recording file, or open up JDK Mission Control. There are 70 predefined views, such as hot-methods, gc-pauses, pinned-threads, allocation-by-site, gc, memory-leaks-by-class, and more</A>
-<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8305092">JDK-8305092 Thread.sleep(millis, nanos) is now able to perform sub-millisecond sleeps. Before this change, a non-zero nanos argument would round up to a full millisecond. While the precision is improved on most POSIX systems, the actual sleep duration is still subject to the precision and accuracy of system facilities</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8306703">JDK-8306703 New JFR View command can aggregate and display event data in a tabular form</A> without the need to dump a recording file, or open up JDK Mission Control. There are 70 predefined views, such as hot-methods, gc-pauses, pinned-threads, allocation-by-site, gc, memory-leaks-by-class, and more
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8305092">JDK-8305092 Thread.sleep(millis, nanos) is now able to perform sub-millisecond sleeps.</A> Before this change, a non-zero nanos argument would round up to a full millisecond. While the precision is improved on most POSIX systems, the actual sleep duration is still subject to the precision and accuracy of system facilities
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8303392">JDK-8303392 Runtime.exec and ProcessBuilder logging of command arguments</A>
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8301627">JDK-8301627 System.exit() and Runtime.exit() logging</A>
 <LI><A HREF="https://openjdk.org/jeps/442">JEP442: Foreign Function & Memory API (Third Preview). Still in preview after many iterations. Useful for off heap management</A>
 <LI><A HREF="https://openjdk.org/jeps/446">JEP446: Scoped Values (Preview). More efficient than thread-local variables, especially with large numbers of virtual threads</A>
-<LI><A HREF="https://openjdk.org/jeps/448">JEP448: Vector API (Sixth Incubator). Vector computations that reliably compile at runtime to optimal vector hardware instructions. If you use these types of operations - eg ML, image processing, scientific processing, massive financial calculations, etc - then you should check it out and feedback since this matters to you</A>
+<LI><A HREF="https://openjdk.org/jeps/448">JEP448: Vector API (Sixth Incubator). Vector computations that reliably compile at runtime to optimal vector hardware instructions.</A> If you use these types of operations - eg ML, image processing, scientific processing, massive financial calculations, etc - then you should check it out and feedback since this matters to you
 <LI><A HREF="https://javaspecialists.eu/archive/Issue302-Virtual-Thread-Deadlocks.html">Analyzing virtual thread deadlocks</A>
 <LI><A HREF="https://egahlin.github.io/2023/05/30/views.html">JFR view command</A>
 <LI><A HREF="http://www.fasterj.com/articles/jep451-q-and-a.shtml">Questions And Answers For JEP 451</A>
@@ -230,9 +230,9 @@
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8305753">JDK-8305753 JIT compilation is now supprted for -Xshare:dump when  -Xmixed is also specified</A>
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8316735">JDK-8316735 Hotspot hs_err files now print the lock stack when -XX:LockingMode=2 is enabled</A>
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8306441">JDK-8306441 Application pause time during heap dumps has been significantly reduced</A>
-<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8314243">JDK-8314243 A new -XX:UserThreadWaitAttemptsAtExit=N specified how long the JVM waits for user threads to stop executing native code; N specifies the number of 10ms waits up to a maximum of 10 seconds, defaulting to 300ms</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8314243">JDK-8314243 A new -XX:UserThreadWaitAttemptsAtExit=N specified how long the JVM waits</A> for user threads to stop executing native code; N specifies the number of 10ms waits up to a maximum of 10 seconds, defaulting to 300ms
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8211238">JDK-8211238 A new JFR event has been added, jdk.DeprecatedInvocation</A>
-<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8319551">JDK-8319551 There is increased startup time when Using -XX:StartFlightRecording - this is expected to be decreased again in a future JDK version</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8319551">JDK-8319551 There is increased startup time when Using -XX:StartFlightRecording</A> - this is expected to be decreased again in a future JDK version
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8288899">JDK-8288899 New ForkJoin* methods invokeAllUninterruptibly, adaptInterruptible</A>
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8308593">JDK-8308593 TCP_KEEP* extended socket options now supported on Windows</A>
 <LI><A HREF="https://openjdk.org/jeps/423">GC improvement: JEP423 Region pinning for G1 means better GC performance when JNI code executes</A>
@@ -244,7 +244,7 @@
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8314573">GC improvement: JDK-8314573 More deterministic G1 GC heap resize at remark</A>
 <LI><A HREF="https://openjdk.org/jeps/464">JEP464 Scoped Values (Second Preview) More efficient than thread-local variables, especially with large numbers of virtual threads</A>
 <LI><A HREF="https://openjdk.org/jeps/462">JEP462 Structured Concurrency (Second Preview). Simplify concurrent programming by grouping related tasks running in different threads</A>
-<LI><A HREF="https://openjdk.org/jeps/460">JEP460: Vector API (Seventh Incubator). Vector computations that reliably compile at runtime to optimal vector hardware instructions. Useful for ML, image processing, scientific processing, massive financial calculations, etc</A>
+<LI><A HREF="https://openjdk.org/jeps/460">JEP460: Vector API (Seventh Incubator). Vector computations that reliably compile at runtime to optimal vector hardware instructions.</A> Useful for ML, image processing, scientific processing, massive financial calculations, etc
 <LI><A HREF="https://www.happycoders.eu/java/foreign-function-memory-api/">Foreign Function & Memory API examples</A>
 </UL>
 <HR>
@@ -261,29 +261,29 @@
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8139457">JDK-8139457 Relax alignment of array elements - improves the footprint in some cases, but Unsafe accesses to arrays could now be unaligned</A>
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8325496">JDK-8325496 -XX:TrimNativeHeapInterval=ms is now an official product switch - allows the JVM to trim the native heap at periodic intervals</A>
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8324066">JDK-8324066 clhsdb jstack no longer scans for java.util.concurrent locks by default - you need to use the -l option for that</A>
-<LI><A HREF="https://stackoverflow.com/a/78641227">-XX:TrimNativeHeapInterval=ms can be used in earlier JDK versions by adding add -XX:+UnlockExperimentalVMOptions, or dynamically applied with <CODE>jcmd PID System.trim_native_heap</CODE></A>
+<LI><A HREF="https://stackoverflow.com/a/78641227">-XX:TrimNativeHeapInterval=ms can be used in earlier JDK versions by adding add -XX:+UnlockExperimentalVMOptions,</A> or dynamically applied with <CODE>jcmd PID System.trim_native_heap</CODE>
 </UL>
 <HR>
 
 <H2>Java/JDK/JVM 24</H2>
 
 <UL>
-<LI><A HREF="https://openjdk.org/jeps/475">JEP-475 Although the title "Late Barrier Expansion for G1" seems like it's about changing something in G1, this is actually reducing additional overheads that G1 places on the C2 compiler - so JITC will be faster than it was when you are also using G1 GC</A>
-<LI><A HREF="https://openjdk.org/jeps/483">JEP-483 Ahead-of-Time class loading & linking - a startup speed optimization with new -XX:AOTMode and -XX:AOTCache options to store and use classes letting the JVM skip reading, parsing, loading, and linking them (doesn't let you skip JIT compilation - that is separate). Essentially the next step in CDS</A>
+<LI><A HREF="https://openjdk.org/jeps/475">JEP-475 Although the title "Late Barrier Expansion for G1" seems like it's about changing something in G1,</A> this is actually reducing additional overheads that G1 places on the C2 compiler - so JITC will be faster than it was when you are also using G1 GC
+<LI><A HREF="https://openjdk.org/jeps/483">JEP-483 Ahead-of-Time class loading & linking - a startup speed optimization with new -XX:AOTMode and -XX:AOTCache options</A> to store and use classes letting the JVM skip reading, parsing, loading, and linking them (doesn't let you skip JIT compilation - that is separate). Essentially the next step in CDS
 <LI><A HREF="https://openjdk.org/jeps/484">JEP-484 Class File API - a standard API for parsing, generating, and transforming Java class files</A>
 <LI><A HREF="https://openjdk.org/jeps/490">JEP-490 ZGC: Remove the non-generational mode. Because non-generational GC is almost always worse</A>
-<LI><A HREF="https://openjdk.org/jeps/491">JEP-491 Synchronize virtual threads without pinning. This took forever, but is finally here. You no longer need to try and migrate synchronized blocks and methods to use locks</A>
+<LI><A HREF="https://openjdk.org/jeps/491">JEP-491 Synchronize virtual threads without pinning. This took forever, but is finally here.</A> You no longer need to try and migrate synchronized blocks and methods to use locks
 <LI><A HREF="https://openjdk.org/jeps/493">JEP-493 Linking runtime images without JMODs. Gives smaller images from jlink in some scenarios</A>
 <LI><A HREF="https://openjdk.org/jeps/498">JEP-498 Warn upon use of memory-access methods in sun.misc.Unsafe</A>
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8337199">JDK-8337199 Two new jcmd commands Thread.vthread_scheduler and Thread.vthread_pollers</A>
 <LI><A HREF="https://bugs.openjdk.org/browse/JDK-8344882">JDK-8344882 Memory used by internal temporary direct buffers is no longer limited - no longer included in MaxDirectMemorySize</A>
-<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8286851">JDK-8286851 Options -verbosegc, -noclassgc, -verify, -verifyremote, -ss, -ms and -mx are deprecated. Old->new: -verbosegc -> -verbose:gc, -noclassgc -> -Xnoclassgc, -verify -> -Xverify:all, -verifyremote -> -Xverify:remote, -ss -> -Xss, -ms -> -Xms, -mx -> -Xmx</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8286851">JDK-8286851 Options -verbosegc, -noclassgc, -verify, -verifyremote, -ss, -ms and -mx are deprecated.</A> Old->new: -verbosegc -> -verbose:gc, -noclassgc -> -Xnoclassgc, -verify -> -Xverify:all, -verifyremote -> -Xverify:remote, -ss -> -Xss, -ms -> -Xms, -mx -> -Xmx
 <LI><A HREF="https://openjdk.org/jeps/499">JEP-499 Structured Concurrency (Fourth Preview). Simplify concurrent programming by grouping related tasks running in different threads</A>
-<LI><A HREF="https://openjdk.org/jeps/404">JEP-404 Generational Shenandoah (Experimental). Generational GC comes to all GCs eventually. Enable with -XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCMode=generational</A>
+<LI><A HREF="https://openjdk.org/jeps/404">JEP-404 Generational Shenandoah (Experimental). Generational GC comes to all GCs eventually.</A> Enable with -XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCMode=generational
 <LI><A HREF="https://openjdk.org/jeps/450">JEP-450 Compact Object Headers (Experimental). Smaller is better if it works for your deployment -XX:+UnlockExperimentalVMOptions -XX:+UseCompactObjectHeaders</A>
 <LI><A HREF="https://openjdk.org/jeps/487">JEP-487 Scoped Values (Fourth Preview). More efficient than thread-local variables, especially with large numbers of virtual threads</A>
-<LI><A HREF="https://openjdk.org/jeps/489">JEP-489 Vector API (Ninth Incubator). Vector computations that reliably compile at runtime to optimal vector hardware instructions. Useful for ML, image processing, scientific processing, massive financial calculations, etc</A>
-<LI><A HREF="https://openjdk.org/jeps/488">JEP-488 Primitive types in patterns, instanceof, and switch (Second Preview). Unlikely to provide any significant performance improvement (fair enough as that's not the motivation)</A>
+<LI><A HREF="https://openjdk.org/jeps/489">JEP-489 Vector API (Ninth Incubator). Vector computations that reliably compile at runtime to optimal vector hardware instructions.</A> Useful for ML, image processing, scientific processing, massive financial calculations, etc
+<LI><A HREF="https://openjdk.org/jeps/488">JEP-488 Primitive types in patterns, instanceof, and switch (Second Preview).</A> Unlikely to provide any significant performance improvement (fair enough as that's not the motivation)
 <LI><A HREF="https://www.unlogged.io/post/class-file-api-not-your-everyday-java-api">Class File API</A>
 <LI><A HREF="https://ifesunmola.com/a-basic-introduction-to-the-classfile-api/">A Basic Introduction to the Classfile API</A>
 <LI><A HREF="https://jameshamilton.eu/programming/build-compiler-jep-457-class-file-api">Build A Compiler With The JEP 457 Class-File API</A>
@@ -293,6 +293,38 @@
 </UL>
 <HR>
 
+<H2>Java/JDK/JVM 25</H2>
+
+<UL>
+<LI><A HREF="https://openjdk.org/jeps/514">JEP-514 Ahead-of-Time command-line simplification.</A> Now allow the two-step `-XX:AOTMode=record -XX:AOTConfiguration=app.aotconf ` then `-XX:AOTMode=create -XX:AOTConfiguration=app.aotconf -XX:AOTCache=app.aot` to be replaced with a one-step `-XX:AOTCacheOutput=app.aot`
+<LI><A HREF="https://openjdk.org/jeps/515">JEP-515 Ahead-of-time method profiling</A> - improves warmup time by making method-execution profiles from a previous run of an application instantly available. Uses the AOT cache mechanism, ie run the application, record its AOT configuration `java -XX:AOTMode=record -XX:AOTConfiguration=app.aotconf ..., create the cache  `java -XX:AOTMode=create -XX:AOTConfiguration=app.aotconf -XX:AOTCache=app.aot ...` then run with the cache `java -XX:AOTCache=app.aot -cp app.jar ...` (also see above JEP 514 item which lets you use the one-step `-XX:AOTCacheOutput=app.aot` option, which equally applies to this feature)
+<LI><A HREF="https://openjdk.org/jeps/518">JEP-518 Reduces safepoint bias in JFR sampling. Nothing to turn on here, it's applied automatically if you use JDK 25+</A>
+<LI><A HREF="https://openjdk.org/jeps/519">JEP-519 Compact object headers are no longer experimental.</A> Use with -XX:+UseCompactObjectHeaders. Should reduce memory and CPU a bit
+<LI><A HREF="https://openjdk.org/jeps/520">JEP-520 Adding JFR method timing and tracing via bytecode instrumentation.</A> Instrumenting small amounts of non-critical code is fine, but if you instrument heavily looped code or extensively through the app, the overheads are huge. Java agents that do code instrumentation are verry very careful to be selective about what they instrument, and so should you! The JEP gives some nice examples, for example tracing HashMap.resize() with `java -XX:StartFlightRecording:jdk.MethodTrace#filter=java.util.HashMap::resize,filename=...` and timing every static initializer `java '-XX:StartFlightRecording:method-timing=::<clinit>,filename=...`
+<LI><A HREF="https://openjdk.org/jeps/521">JEP-521 Shenandoah generational mode is no longer experimental (but not yet default).</A> Enable with -XX:+UseShenandoahGC -XX:ShenandoahGCMode=generational
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8356698">JDK-8356698 jfr.Contextual, has been introduced</A> to mark fields in custom JFR events that contain contextual information relevant to other events occurring in the same thread. Example in the articles section of this newsletter
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8343110">JDK-8343110 New getChars(int, int, char[], int) method in CharSequence and CharBuffer</A> to bulk-read, likely to be more efficient than looping over characters one at a time
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8328919">JDK-8328919 New Methods on BodyHandlers and BodySubscribers to limit the response body bytes size</A> accepted by an HttpClient. For example `HttpClient.newHttpClient().send(request, BodyHandlers.limiting(BodyHandlers.ofString(), 1024))` limits the response size to 1k
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8319447">JDK-8319447 Some updates to ForkJoinPool and CompletableFuture to make delayed, timeout and async tasks more efficient.</A> Includes ScheduledExecutorService.submitWithTimeout, but mainly users of ForkJoinPools - including virtual thread scheduling - get more efficient operations for delayed actions, periodic actions, and cancellations
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8356870">JDK-8356870 Thread dumps generated by HotSpotDiagnosticMXBean.dumpThreads and jcmd Thread.dump_to_file now include lock information</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8241678">JDK-8241678 The periodic sampling functionality in PerfData has been removed, including the StatSampler and its controlling flag -XX:PerfDataSamplingInterval</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8138614">JDK-8138614 StringBuilder and StringBuffer can now return the same String instead of always having to return a new one (eg the same empty string instance)</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8356938">Metaspace is now printed separately from GC</A>
+<LI><A HREF="https://openjdk.org/jeps/506">JEP-506 Scoped Values (Fourth Preview). More efficient than thread-local variables, especially with large numbers of virtual threads</A>
+<LI><A HREF="https://openjdk.org/jeps/502">JEP-502: Stable Values (Preview). An API for stable values, objects that hold immutable data.</A> Treated as constants by the JVM, enabling the same performance optimizations that are available by declaring a field final
+<LI><A HREF="https://openjdk.org/jeps/505">JEP-505 Structured Concurrency (Fifth Preview). Simplify concurrent programming by grouping related tasks running in different threads</A>
+<LI><A HREF="https://openjdk.org/jeps/507">JEP-507 Primitive types in patterns, instanceof, and switch (Third Preview). Unlikely to provide any significant performance improvement (fair enough as that's not the motivation)</A>
+<LI><A HREF="https://openjdk.org/jeps/508">JEP-508 Vector API (Tenth Incubator). Vector computations that reliably compile at runtime to optimal vector hardware instructions.</A> Useful for ML, GenAI, image processing, scientific processing, massive financial calculations, etc
+<LI><A HREF="https://openjdk.org/jeps/509">JEP-509 (Experimental), add CPU-time profiling to JFR on Linux systems only.</A> New event `java -XX:StartFlightRecording=jdk.CPUTimeSample#enabled=true,filename=profile.jfr ...` or dynamically `jcmd PID JFR.start settings=/path/cpu_profile.jfc duration=4m`
+<LI><A HREF="https://inside.java/2025/06/09/quality-heads-up/">Separate Metaspace and GC Printing per JDK-8356938</A>
+<LI><A HREF="https://mostlynerdless.de/blog/2025/05/20/taming-the-bias-unbiased-safepoint-based-stack-walking-in-jfr/">Understanding the safepoint bias avoidance of JEP 518</A>
+<LI><A HREF="https://javadevtech.com/2025/06/07/ahead-of-time-aot-cache-with-project-leyden/">Ahead-of-Time (AOT) compilation</A>
+<LI><A HREF="https://inside.java/2025/06/10/podcast-037/">Stable Values API JEP502 define immutable objects initialized at most once,</A> offering the flexibility of lazy initialization with the performance benefits of final fields eg a singleton: `private static final StableValue<Thing> INSTANCE = StableValue.create(Thing::new); public static Thing getInstance() {return INSTANCE.get();}`
+<LI><A HREF="https://blog.kelunik.com/2025/08/24/method-trace-java-25.html">Method Timing in Java 25 with JFR and OpenTelemetry (Niklas Keller/kelunik's blog)</A>
+<LI><A HREF="https://egahlin.github.io/2025/05/31/whats-new-in-jdk-25.html">What's new for JFR in JDK 25 (Erik Gahlin/egahlin)</A>
+<LI><A HREF="https://mostlynerdless.de/blog/2025/06/11/java-25s-new-cpu-time-profiler-1/">Java 25's new CPU-Time Profiler (Johannes Bechberger/mostlynerdless)</A>
+</UL>
+<HR>
 
  </BODY>
 </HTML>
