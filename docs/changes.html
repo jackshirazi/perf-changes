@@ -358,5 +358,29 @@
 </UL>
 <HR>
 
+<H2>Java/JDK/JVM 26</H2>
+
+<UL>
+<LI><A HREF="https://openjdk.org/jeps/523">JEP-523: G1 becomes the default garbage collector in all environments. Even with 1 CPU and small heaps which were previously serial - the claim is that in JVM 27 G1 is as good as serial for these</A>
+<LI><A HREF="https://openjdk.org/jeps/534">JEP-534: Compact Object Headers will be on by default. You can disable it by running with -XX:-UseCompactObjectHeaders</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8384353">JDK-8384353: Significant performance gains in ML-KEM and ML-DSA algorithms</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8378893">JDK-8378893: Significant performance gains in X25519 key agreement and Ed25519 signature algorithms</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8359706">JDK-8359706: VM.info and hs_err_pid Logs Now Report Current Open File Descriptors</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8227106">JDK-8227106: Rename -XX:InitiatingHeapOccupancyPercent to -XX:G1IHOP</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8382740">JDK-8382740: JFR Event jdk.OldObjectSample Disabled for Generational ZGC</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8381002">JDK-8381002: JSON format thread dump now generates thread identifiers, thread counts, and the process identifier as numbers</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8238686">JDK-8238686: Change the Default Values of MinHeapFreeRatio and MaxHeapFreeRatio for G1</A>
+<LI><A HREF="https://bugs.openjdk.org/browse/JDK-8369736">JDK-8369736: New Management Interface for AOT Cache Creation</A>
+<LI><A HREF="https://openjdk.org/jeps/537">JEP-537: Vector API (Twelfth Incubator)</A>. Vector computations that reliably compile at runtime to optimal vector hardware instructions. Useful for ML, GenAI, image processing, scientific processing, massive financial calculations, etc
+<LI><A HREF="https://openjdk.org/jeps/533">JEP-533: Structured Concurrency (Seventh Preview)</A>. Simplify concurrent programming by grouping related tasks running in different threads
+<LI><A HREF="https://openjdk.org/jeps/532">JEP-532: Primitive types in patterns, instanceof, and switch (Fifth Preview)</A>. Unlikely to provide any significant performance improvement (fair enough as that's not the motivation)
+<LI><A HREF="https://openjdk.org/jeps/531">JEP-531: Lazy Constants (Third Preview)</A>. An API for lazy constants, objects that hold unmodifiable data. Treated as constants by the JVM, enabling the same performance optimizations that are available by declaring a field final
+<LI><A HREF="https://github.com/async-profiler/async-profiler/releases/tag/v4.5">async-profiler 4.5 adds JDK 27 support including compatibility with its changed compressed-class-pointer layout</A>
+<LI><A HREF="https://download.java.net/java/early_access/jdk27/docs/api/jdk.management/jdk/management/HotSpotAOTCacheMXBean.html">HotSpotAOTCacheMXBean allows tools or JConsole to end an AOT training recording and write the cache without terminating the JVM</A>
+<LI><A HREF="https://www.happycoders.eu/java/compact-object-headers/">Compact Object Headers in Java (Sven Woltmann/HappyCoders)</A> <! April 2025 >
+<LI><A HREF="https://tschatzl.github.io/2026/08/10/jdk27-g1-serial-parallel-gc-changes.html">JDK 27 G1,Parallel,Serial GC changes (Thomas Schatzl/tschatzl@github)</A> <! August 2026 >
+</UL>
+<HR>
+
  </BODY>
 </HTML>
